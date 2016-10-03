@@ -10,8 +10,8 @@ namespace WindowsFormsApplication1
 {
     static class SheduleHelper
     {
-        public static DateTime date_X = DateTime.Today;
-        public static bool[] shedule_arr = new bool[14];
+        public static DateTime dateX;
+        public static bool[] sheduleArr = new bool[14];
         public static int initWeekParity;
 
         public static int GetRestTime()
@@ -19,10 +19,10 @@ namespace WindowsFormsApplication1
             DateTime dateToday = DateTime.Now;
             
             double daysToBell = 0;
-
+            dateX = DateTime.Today;
             //Добавляем часы и минуты, введенные на элементах numericUpDown1 и 2
-            date_X = date_X.AddHours((double)Program.myForm.numericUpDown1.Value);
-            date_X = date_X.AddMinutes((double)Program.myForm.numericUpDown2.Value);
+            dateX = dateX.AddHours((double)Program.myForm.numericUpDown1.Value);
+            dateX = dateX.AddMinutes((double)Program.myForm.numericUpDown2.Value);
             //j - день на карте двухнедельного расписания
             int j = ((int)dateToday.DayOfWeek - 1);
             //у них воскресенье - нулевой день недели, у нас - шестой
@@ -31,7 +31,7 @@ namespace WindowsFormsApplication1
             //если текущая неделя - вторая
             if (GetWeekParity() != initWeekParity)
             { j = j + 7; }
-            if (date_X <= dateToday)
+            if (dateX <= dateToday)
             {
                 j = j + 1;
                 daysToBell++;
@@ -41,12 +41,12 @@ namespace WindowsFormsApplication1
 
             if (Program.myForm.radioButtonSheduleBell.Checked)
             {
-                if (shedule_arr.All(x => !x))
+                if (sheduleArr.All(x => !x))
                 {
                     MessageBox.Show("Ошибка! Не выбраны дни для будильника");
                     return 0;
                 }
-                while (!shedule_arr[j])
+                while (!sheduleArr[j])
                 {
                     daysToBell++;
                     j++;
@@ -54,8 +54,8 @@ namespace WindowsFormsApplication1
                         j = 0;
                 }
             }
-            date_X = date_X.AddDays(daysToBell);
-            return (int)(date_X - dateToday).TotalSeconds;
+            dateX = dateX.AddDays(daysToBell);
+            return (int)(dateX - dateToday).TotalSeconds;
             
         }
 
@@ -69,11 +69,11 @@ namespace WindowsFormsApplication1
         {
             for (int k = 0; k < 7; k++)
             {
-                shedule_arr[k] = Convert.ToBoolean(Program.myForm.checkedListBox1.GetItemCheckState(k));
+                sheduleArr[k] = Convert.ToBoolean(Program.myForm.checkedListBox1.GetItemCheckState(k));
             }
             for (int k = 7; k < 14; k++)
             {
-                shedule_arr[k] = Convert.ToBoolean(Program.myForm.checkedListBox2.GetItemCheckState(k - 7));
+                sheduleArr[k] = Convert.ToBoolean(Program.myForm.checkedListBox2.GetItemCheckState(k - 7));
             }
         }
     }

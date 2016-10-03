@@ -6,6 +6,7 @@ using System.Threading;
 using System.IO;
 using System.Globalization;
 using System.Threading.Tasks;
+using WMPLib;
 
 namespace WindowsFormsApplication1
 {
@@ -25,27 +26,38 @@ namespace WindowsFormsApplication1
         milliseconds);
 
         static IntPtr handle;
-
+        
         public Form1()
         {
             InitializeComponent();
         }
-        
-        void ThreadFunction()
+
+        void PlayMusic()
         {
-            long duetime = -Convert.ToInt64(SheduleHelper.GetRestTime()) * 10000000;
-            if (InvokeRequired)
-            Invoke((Action)(()=>label2.Text="Дата следующего сигнала " + SheduleHelper.date_X));
-
-            handle = CreateWaitableTimer(IntPtr.Zero, true, "MyWaitabletimer");
-            SetWaitableTimer(handle, ref duetime, 0, IntPtr.Zero, IntPtr.Zero, true);
-            uint INFINITE = 0xFFFFFFFF;
-            int ret = WaitForSingleObject(handle, INFINITE);
-
-            WMPLib.WindowsMediaPlayer wplayer = new WMPLib.WindowsMediaPlayer();
-
+            WindowsMediaPlayer wplayer = new WindowsMediaPlayer();
             wplayer.URL = Program.myForm.openFileDialog1.FileName;
             wplayer.controls.play();
+        }
+
+        void ThreadFunction()
+        {
+            while (true)
+            {
+                long duetime = -Convert.ToInt64(SheduleHelper.GetRestTime()) * 10000000;
+                if (InvokeRequired)
+                    Invoke((Action)(() => labelDateX.Text = "Дата следующего сигнала " + SheduleHelper.dateX));
+
+                handle = CreateWaitableTimer(IntPtr.Zero, true, "MyWaitabletimer");
+                SetWaitableTimer(handle, ref duetime, 0, IntPtr.Zero, IntPtr.Zero, true);
+                uint INFINITE = 0xFFFFFFFF;
+                int ret = WaitForSingleObject(handle, INFINITE);
+
+                PlayMusic();
+                Thread.Sleep(1000);
+
+                if (Program.myForm.radioButtonSingleBell.Checked)
+                    break;
+            }
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -68,7 +80,7 @@ namespace WindowsFormsApplication1
             openFileDialog1.ShowDialog();
             if (openFileDialog1.FileName != "")
             { FileInfo fi = new FileInfo(openFileDialog1.FileName); }
-            label1.Text = openFileDialog1.FileName;
+            labelFilePath.Text = openFileDialog1.FileName;
         }
     }
 }
