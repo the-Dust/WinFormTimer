@@ -28,9 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.button1 = new System.Windows.Forms.Button();
+            this.buttonStart = new System.Windows.Forms.Button();
             this.labelFilePath = new System.Windows.Forms.Label();
-            this.button2 = new System.Windows.Forms.Button();
+            this.buttonMelody = new System.Windows.Forms.Button();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.checkedListBox1 = new System.Windows.Forms.CheckedListBox();
             this.checkedListBox2 = new System.Windows.Forms.CheckedListBox();
@@ -39,19 +39,22 @@
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
             this.labelDateX = new System.Windows.Forms.Label();
+            this.checkBoxWeekdays = new System.Windows.Forms.CheckBox();
+            this.buttonStop = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
             this.SuspendLayout();
             // 
-            // button1
+            // buttonStart
             // 
-            this.button1.Location = new System.Drawing.Point(348, 38);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 1;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.buttonStart.Location = new System.Drawing.Point(299, 38);
+            this.buttonStart.Name = "buttonStart";
+            this.buttonStart.Size = new System.Drawing.Size(124, 23);
+            this.buttonStart.TabIndex = 1;
+            this.buttonStart.Text = "Завести будильник";
+            this.buttonStart.UseVisualStyleBackColor = true;
+            this.buttonStart.Click += new System.EventHandler(this.buttonStart_Click);
+            this.buttonStart.Enabled = !Form1.isStarted;
             // 
             // labelFilePath
             // 
@@ -62,27 +65,27 @@
             this.labelFilePath.TabIndex = 2;
             this.labelFilePath.Text = "Выберите сигнал будильника";
             // 
-            // button2
+            // buttonMelody
             // 
-            this.button2.Location = new System.Drawing.Point(348, 103);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 3;
-            this.button2.Text = "button2";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.buttonMelody.Location = new System.Drawing.Point(299, 103);
+            this.buttonMelody.Name = "buttonMelody";
+            this.buttonMelody.Size = new System.Drawing.Size(124, 23);
+            this.buttonMelody.TabIndex = 3;
+            this.buttonMelody.Text = "Выбрать сигнал";
+            this.buttonMelody.UseVisualStyleBackColor = true;
+            this.buttonMelody.Click += new System.EventHandler(this.buttonMelody_Click);
             // 
             // checkedListBox1
             // 
             this.checkedListBox1.FormattingEnabled = true;
             this.checkedListBox1.Items.AddRange(new object[] {
-            "1",
-            "2",
-            "3",
-            "4",
-            "5",
-            "6",
-            "7"});
+            "Пн",
+            "Вт",
+            "Ср",
+            "Чт",
+            "Пт",
+            "Сб",
+            "Вс"});
             this.checkedListBox1.Location = new System.Drawing.Point(33, 185);
             this.checkedListBox1.Name = "checkedListBox1";
             this.checkedListBox1.Size = new System.Drawing.Size(45, 109);
@@ -92,13 +95,13 @@
             // 
             this.checkedListBox2.FormattingEnabled = true;
             this.checkedListBox2.Items.AddRange(new object[] {
-            "1",
-            "2",
-            "3",
-            "4",
-            "5",
-            "6",
-            "7"});
+            "Пн",
+            "Вт",
+            "Ср",
+            "Чт",
+            "Пт",
+            "Сб",
+            "Вс"});
             this.checkedListBox2.Location = new System.Drawing.Point(94, 185);
             this.checkedListBox2.Name = "checkedListBox2";
             this.checkedListBox2.Size = new System.Drawing.Size(45, 109);
@@ -107,6 +110,7 @@
             // radioButtonSingleBell
             // 
             this.radioButtonSingleBell.AutoSize = true;
+            this.radioButtonSingleBell.Checked = true;
             this.radioButtonSingleBell.Location = new System.Drawing.Point(33, 109);
             this.radioButtonSingleBell.Name = "radioButtonSingleBell";
             this.radioButtonSingleBell.Size = new System.Drawing.Size(120, 17);
@@ -159,11 +163,35 @@
             this.labelDateX.TabIndex = 26;
             this.labelDateX.Text = "Задайте время сигнала";
             // 
+            // checkBoxWeekdays
+            // 
+            this.checkBoxWeekdays.AutoSize = true;
+            this.checkBoxWeekdays.Location = new System.Drawing.Point(94, 156);
+            this.checkBoxWeekdays.Name = "checkBoxWeekdays";
+            this.checkBoxWeekdays.Size = new System.Drawing.Size(89, 17);
+            this.checkBoxWeekdays.TabIndex = 27;
+            this.checkBoxWeekdays.Text = "Рабочие дни";
+            this.checkBoxWeekdays.UseVisualStyleBackColor = true;
+            this.checkBoxWeekdays.CheckedChanged += new System.EventHandler(this.checkBoxWeekdays_CheckedChanged);
+            // 
+            // buttonStop
+            // 
+            this.buttonStop.Location = new System.Drawing.Point(299, 211);
+            this.buttonStop.Name = "buttonStop";
+            this.buttonStop.Size = new System.Drawing.Size(124, 23);
+            this.buttonStop.TabIndex = 28;
+            this.buttonStop.Text = "Сбросить будильник";
+            this.buttonStop.UseVisualStyleBackColor = true;
+            this.buttonStop.Click += new System.EventHandler(this.buttonStop_Click);
+            this.buttonStop.Enabled = Form1.isStarted;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(465, 348);
+            this.Controls.Add(this.buttonStop);
+            this.Controls.Add(this.checkBoxWeekdays);
             this.Controls.Add(this.labelDateX);
             this.Controls.Add(this.numericUpDown2);
             this.Controls.Add(this.numericUpDown1);
@@ -171,9 +199,9 @@
             this.Controls.Add(this.radioButtonSingleBell);
             this.Controls.Add(this.checkedListBox2);
             this.Controls.Add(this.checkedListBox1);
-            this.Controls.Add(this.button2);
+            this.Controls.Add(this.buttonMelody);
             this.Controls.Add(this.labelFilePath);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.buttonStart);
             this.Name = "Form1";
             this.Text = "Form1";
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
@@ -185,9 +213,9 @@
 
         #endregion
 
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button buttonStart;
         private System.Windows.Forms.Label labelFilePath;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button buttonMelody;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.RadioButton radioButtonSingleBell;
         private System.Windows.Forms.Label labelDateX;
@@ -196,6 +224,8 @@
         public System.Windows.Forms.RadioButton radioButtonSheduleBell;
         public System.Windows.Forms.CheckedListBox checkedListBox1;
         public System.Windows.Forms.CheckedListBox checkedListBox2;
+        private System.Windows.Forms.CheckBox checkBoxWeekdays;
+        private System.Windows.Forms.Button buttonStop;
     }
 }
 
