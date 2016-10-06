@@ -1,4 +1,5 @@
-﻿namespace WindowsFormsApplication1
+﻿using System.Windows.Forms;
+namespace WindowsFormsApplication1
 {
     partial class Form1
     {
@@ -28,6 +29,8 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.buttonStart = new System.Windows.Forms.Button();
             this.labelFilePath = new System.Windows.Forms.Label();
             this.buttonMelody = new System.Windows.Forms.Button();
@@ -41,6 +44,7 @@
             this.labelDateX = new System.Windows.Forms.Label();
             this.checkBoxWeekdays = new System.Windows.Forms.CheckBox();
             this.buttonStop = new System.Windows.Forms.Button();
+            this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
             this.SuspendLayout();
@@ -54,7 +58,6 @@
             this.buttonStart.Text = "Завести будильник";
             this.buttonStart.UseVisualStyleBackColor = true;
             this.buttonStart.Click += new System.EventHandler(this.buttonStart_Click);
-            this.buttonStart.Enabled = !Form1.isStarted;
             // 
             // labelFilePath
             // 
@@ -183,7 +186,11 @@
             this.buttonStop.Text = "Сбросить будильник";
             this.buttonStop.UseVisualStyleBackColor = true;
             this.buttonStop.Click += new System.EventHandler(this.buttonStop_Click);
-            this.buttonStop.Enabled = Form1.isStarted;
+            // 
+            // notifyIcon
+            // 
+            this.notifyIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon.Icon")));
+            this.notifyIcon.Text = "notifyIcon";
             // 
             // Form1
             // 
@@ -202,12 +209,16 @@
             this.Controls.Add(this.buttonMelody);
             this.Controls.Add(this.labelFilePath);
             this.Controls.Add(this.buttonStart);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
             this.Text = "Form1";
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
+            this.notifyIcon.MouseDoubleClick += notifyIcon_MouseDoubleClick;
+            this.Resize += this.Form_Resize;
+
 
         }
 
@@ -226,6 +237,7 @@
         public System.Windows.Forms.CheckedListBox checkedListBox2;
         private System.Windows.Forms.CheckBox checkBoxWeekdays;
         private System.Windows.Forms.Button buttonStop;
+        private System.Windows.Forms.NotifyIcon notifyIcon;
     }
 }
 

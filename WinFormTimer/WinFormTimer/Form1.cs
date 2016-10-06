@@ -32,8 +32,7 @@ namespace WindowsFormsApplication1
 
         static CancellationTokenSource tokenSource2;
 
-        public static bool isStarted;
-        
+      
         
         
         public Form1()
@@ -87,7 +86,9 @@ namespace WindowsFormsApplication1
 
             tokenSource2 = new CancellationTokenSource();
             Task task = Task.Factory.StartNew(ThreadFunction, tokenSource2.Token);
-            isStarted = true;
+ 
+            Program.myForm.buttonStop.Enabled = true;
+            Program.myForm.buttonStart.Enabled = false;
             
         }
 
@@ -119,10 +120,28 @@ namespace WindowsFormsApplication1
         {
             CancelWaitableTimer(handle);
             tokenSource2.Cancel();
-            isStarted = false;
+            
+
+            Program.myForm.buttonStop.Enabled = false;
+            Program.myForm.buttonStart.Enabled = true;
         }
 
-        
+        private void Form_Resize(object sender, EventArgs e)
+        {
+            if (this.WindowState == FormWindowState.Minimized)
+            {
+                this.Hide();
+                notifyIcon.Visible = true;
+            }
+        }
+
+
+        private void notifyIcon_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            notifyIcon.Visible = false;
+            this.ShowInTaskbar = true;
+            WindowState = FormWindowState.Normal;
+        }
 
     }
 }
