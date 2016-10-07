@@ -30,7 +30,7 @@ namespace WindowsFormsApplication1
 
         static IntPtr handle;
 
-        static CancellationTokenSource tokenSource2;
+        static CancellationTokenSource tokenSource;
 
       
         
@@ -44,18 +44,37 @@ namespace WindowsFormsApplication1
         {
             WindowsMediaPlayer wplayer = new WindowsMediaPlayer();
             wplayer.URL = Program.myForm.openFileDialog1.FileName;
+            (wplayer.settings as WMPLib.IWMPSettings).setMode("loop", true);
             wplayer.controls.play();
+
+            //Устанавливаем автоотключение после 10мин, если пользователь не выключил сигнал
+            Action action = () =>
+                {
+                    Thread.Sleep(600000);
+                    wplayer.controls.stop();
+                };
+            var task = Task.Factory.StartNew(action);
+
+            if (MessageBox.Show("Пора вставать! Отключить сигнал будильника?", "Просыпайся!") == DialogResult.OK);
+                wplayer.controls.stop();
         }
 
         void ThreadFunction()
         {
-            CancellationToken ct = tokenSource2.Token;
+            CancellationToken ct = tokenSource.Token;
             ct.ThrowIfCancellationRequested();
             while (true)
             {
-                long duetime = -Convert.ToInt64(SheduleHelper.GetRestTime()) * 10000000;
+                int[] restTime = SheduleHelper.GetRestTime();
+                if (restTime[0] == -1)
+                {
+                    Invoke((Action)(() => buttonStop_Click()));
+                    break;
+                }
+                long duetime = -Convert.ToInt64(restTime[0]) * 10000000;
                 if (InvokeRequired)
-                    Invoke((Action)(() => labelDateX.Text = "Дата следующего сигнала " + SheduleHelper.dateX));
+                    Invoke((Action)(() => labelDateX.Text = "Дата следующего сигнала " + SheduleHelper.dateX
+                        + String.Format(" {0}-я неделя", restTime[1]>6?2:1)));
 
                 handle = CreateWaitableTimer(IntPtr.Zero, true, "MyWaitabletimer");
                 SetWaitableTimer(handle, ref duetime, 0, IntPtr.Zero, IntPtr.Zero, true);
@@ -67,7 +86,6 @@ namespace WindowsFormsApplication1
 
                 PlayMusic();
                 Thread.Sleep(1000);
-
 
                 if (Program.myForm.radioButtonSingleBell.Checked)
                     break;
@@ -84,8 +102,8 @@ namespace WindowsFormsApplication1
             SheduleHelper.Shedule();
             SheduleHelper.initWeekParity = SheduleHelper.GetWeekParity();
 
-            tokenSource2 = new CancellationTokenSource();
-            Task task = Task.Factory.StartNew(ThreadFunction, tokenSource2.Token);
+            tokenSource = new CancellationTokenSource();
+            Task task = Task.Factory.StartNew(ThreadFunction, tokenSource.Token);
  
             Program.myForm.buttonStop.Enabled = true;
             Program.myForm.buttonStart.Enabled = false;
@@ -114,16 +132,21 @@ namespace WindowsFormsApplication1
                 checkedListBox1.SetItemChecked(i, false);
                 checkedListBox2.SetItemChecked(i, false);
             }
+            
+        }
+
+        private void buttonStop_Click()
+        {
+            CancelWaitableTimer(handle);
+            tokenSource.Cancel();
+            Program.myForm.labelDateX.Text = "Задайте время сигнала";
+            Program.myForm.buttonStop.Enabled = false;
+            Program.myForm.buttonStart.Enabled = true;
         }
 
         private void buttonStop_Click(object sender, EventArgs e)
         {
-            CancelWaitableTimer(handle);
-            tokenSource2.Cancel();
-            
-
-            Program.myForm.buttonStop.Enabled = false;
-            Program.myForm.buttonStart.Enabled = true;
+            buttonStop_Click();
         }
 
         private void Form_Resize(object sender, EventArgs e)
@@ -141,6 +164,15 @@ namespace WindowsFormsApplication1
             notifyIcon.Visible = false;
             this.ShowInTaskbar = true;
             WindowState = FormWindowState.Normal;
+        }
+
+        private void radioButtonSheduleBell_CheckedChanged(object sender, EventArgs e)
+        {
+            Program.myForm.checkedListBox1.Visible = Program.myForm.radioButtonSheduleBell.Checked;
+            Program.myForm.checkedListBox2.Visible = Program.myForm.radioButtonSheduleBell.Checked;
+            Program.myForm.checkBoxWeekdays.Visible = Program.myForm.radioButtonSheduleBell.Checked;
+            Program.myForm.labelWeek1.Visible = Program.myForm.radioButtonSheduleBell.Checked;
+            Program.myForm.labelWeek2.Visible = Program.myForm.radioButtonSheduleBell.Checked;
         }
 
     }

@@ -45,6 +45,8 @@ namespace WindowsFormsApplication1
             this.checkBoxWeekdays = new System.Windows.Forms.CheckBox();
             this.buttonStop = new System.Windows.Forms.Button();
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
+            this.labelWeek1 = new System.Windows.Forms.Label();
+            this.labelWeek2 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
             this.SuspendLayout();
@@ -89,10 +91,11 @@ namespace WindowsFormsApplication1
             "Пт",
             "Сб",
             "Вс"});
-            this.checkedListBox1.Location = new System.Drawing.Point(33, 185);
+            this.checkedListBox1.Location = new System.Drawing.Point(33, 197);
             this.checkedListBox1.Name = "checkedListBox1";
-            this.checkedListBox1.Size = new System.Drawing.Size(45, 109);
+            this.checkedListBox1.Size = new System.Drawing.Size(58, 109);
             this.checkedListBox1.TabIndex = 18;
+            this.checkedListBox1.Visible = false;
             // 
             // checkedListBox2
             // 
@@ -105,10 +108,11 @@ namespace WindowsFormsApplication1
             "Пт",
             "Сб",
             "Вс"});
-            this.checkedListBox2.Location = new System.Drawing.Point(94, 185);
+            this.checkedListBox2.Location = new System.Drawing.Point(108, 197);
             this.checkedListBox2.Name = "checkedListBox2";
-            this.checkedListBox2.Size = new System.Drawing.Size(45, 109);
+            this.checkedListBox2.Size = new System.Drawing.Size(58, 109);
             this.checkedListBox2.TabIndex = 19;
+            this.checkedListBox2.Visible = false;
             // 
             // radioButtonSingleBell
             // 
@@ -132,6 +136,7 @@ namespace WindowsFormsApplication1
             this.radioButtonSheduleBell.TabStop = true;
             this.radioButtonSheduleBell.Text = "Сигнал по расписанию";
             this.radioButtonSheduleBell.UseVisualStyleBackColor = true;
+            this.radioButtonSheduleBell.CheckedChanged += new System.EventHandler(this.radioButtonSheduleBell_CheckedChanged);
             // 
             // numericUpDown1
             // 
@@ -175,10 +180,12 @@ namespace WindowsFormsApplication1
             this.checkBoxWeekdays.TabIndex = 27;
             this.checkBoxWeekdays.Text = "Рабочие дни";
             this.checkBoxWeekdays.UseVisualStyleBackColor = true;
+            this.checkBoxWeekdays.Visible = false;
             this.checkBoxWeekdays.CheckedChanged += new System.EventHandler(this.checkBoxWeekdays_CheckedChanged);
             // 
             // buttonStop
             // 
+            this.buttonStop.Enabled = false;
             this.buttonStop.Location = new System.Drawing.Point(299, 211);
             this.buttonStop.Name = "buttonStop";
             this.buttonStop.Size = new System.Drawing.Size(124, 23);
@@ -192,11 +199,33 @@ namespace WindowsFormsApplication1
             this.notifyIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon.Icon")));
             this.notifyIcon.Text = "notifyIcon";
             // 
+            // labelWeek1
+            // 
+            this.labelWeek1.AutoSize = true;
+            this.labelWeek1.Location = new System.Drawing.Point(30, 181);
+            this.labelWeek1.Name = "labelWeek1";
+            this.labelWeek1.Size = new System.Drawing.Size(61, 13);
+            this.labelWeek1.TabIndex = 29;
+            this.labelWeek1.Text = "1-я неделя";
+            this.labelWeek1.Visible = false;
+            // 
+            // labelWeek2
+            // 
+            this.labelWeek2.AutoSize = true;
+            this.labelWeek2.Location = new System.Drawing.Point(105, 181);
+            this.labelWeek2.Name = "labelWeek2";
+            this.labelWeek2.Size = new System.Drawing.Size(61, 13);
+            this.labelWeek2.TabIndex = 30;
+            this.labelWeek2.Text = "2-я неделя";
+            this.labelWeek2.Visible = false;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(465, 348);
+            this.Controls.Add(this.labelWeek2);
+            this.Controls.Add(this.labelWeek1);
             this.Controls.Add(this.buttonStop);
             this.Controls.Add(this.checkBoxWeekdays);
             this.Controls.Add(this.labelDateX);
@@ -216,9 +245,6 @@ namespace WindowsFormsApplication1
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
-            this.notifyIcon.MouseDoubleClick += notifyIcon_MouseDoubleClick;
-            this.Resize += this.Form_Resize;
-
 
         }
 
@@ -238,6 +264,8 @@ namespace WindowsFormsApplication1
         private System.Windows.Forms.CheckBox checkBoxWeekdays;
         private System.Windows.Forms.Button buttonStop;
         private System.Windows.Forms.NotifyIcon notifyIcon;
+        private Label labelWeek1;
+        private Label labelWeek2;
     }
 }
 

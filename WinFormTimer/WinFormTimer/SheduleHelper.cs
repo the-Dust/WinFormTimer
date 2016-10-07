@@ -13,11 +13,13 @@ namespace WindowsFormsApplication1
         public static DateTime dateX;
         public static bool[] sheduleArr = new bool[14];
         public static int initWeekParity;
+        
 
-        public static int GetRestTime()
+        public static int[] GetRestTime()
         {
             DateTime dateToday = DateTime.Now;
-            
+            bool error = false;
+
             double daysToBell = 0;
             dateX = DateTime.Today;
             //Добавляем часы и минуты, введенные на элементах numericUpDown1 и 2
@@ -44,9 +46,9 @@ namespace WindowsFormsApplication1
                 if (sheduleArr.All(x => !x))
                 {
                     MessageBox.Show("Ошибка! Не выбраны дни для будильника");
-                    return 0;
+                    error = true;
                 }
-                while (!sheduleArr[j])
+                while (!sheduleArr[j]&&!error)
                 {
                     daysToBell++;
                     j++;
@@ -55,7 +57,7 @@ namespace WindowsFormsApplication1
                 }
             }
             dateX = dateX.AddDays(daysToBell);
-            return (int)(dateX - dateToday).TotalSeconds;
+            return new int[] {error?-1:(int)(dateX - dateToday).TotalSeconds, j};
             
         }
 
