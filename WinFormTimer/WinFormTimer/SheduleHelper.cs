@@ -5,10 +5,11 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.IO;
 using System.Globalization;
+using System.Text.RegularExpressions;
 
 namespace WindowsFormsApplication1
 {
-    static class SheduleHelper
+    class SheduleHelper
     {
         public static DateTime dateX;
         public static bool[] sheduleArr = new bool[14];
@@ -19,14 +20,38 @@ namespace WindowsFormsApplication1
         {
             DateTime dateToday = DateTime.Now;
             bool error = false;
-
+            bool match = true;
+            double stpHours = 0;
+            double stpMinutes = 0;
             double daysToBell = 0;
             dateX = DateTime.Today;
-            //Добавляем часы и минуты, введенные на элементах numericUpDown1 и 2
-            dateX = dateX.AddHours((double)Program.myForm.numericUpDown1.Value);
-            dateX = dateX.AddMinutes((double)Program.myForm.numericUpDown2.Value);
             //j - день на карте двухнедельного расписания
-            int j = ((int)dateToday.DayOfWeek - 1);
+            int j = 0;
+
+            if (Regex.IsMatch(Program.myForm.maskedTextBox.Text, "^[0-9]{2}:[0-9]{2}$"))
+            {
+                stpHours = Convert.ToInt64(Program.myForm.maskedTextBox.Text.Substring(0, 2));
+                stpMinutes = Convert.ToInt64(Program.myForm.maskedTextBox.Text.Substring(3, 2));
+            }
+            else
+                match = false;
+
+            if (stpHours > 23 || stpMinutes > 59 || !match)
+            {
+                Program.myForm.Invoke((Action)(() =>
+                {
+                    Program.myForm.maskedTextBox.Text = "0000";
+                    MessageBox.Show("Ошибка! Введено некорректное время сигнала");
+                }));
+                error = true;
+                goto EndOfGetRestTime;
+            }
+
+            dateX = dateX.AddHours(stpHours);
+            dateX = dateX.AddMinutes(stpMinutes);
+            
+            
+            j = ((int)dateToday.DayOfWeek - 1);
             //у них воскресенье - нулевой день недели, у нас - шестой
             if (j < 0)
             { j = 6; }
@@ -47,6 +72,7 @@ namespace WindowsFormsApplication1
                 {
                     MessageBox.Show("Ошибка! Не выбраны дни для будильника");
                     error = true;
+                    goto EndOfGetRestTime;
                 }
                 while (!sheduleArr[j]&&!error)
                 {
@@ -57,6 +83,7 @@ namespace WindowsFormsApplication1
                 }
             }
             dateX = dateX.AddDays(daysToBell);
+            EndOfGetRestTime:
             return new int[] {error?-1:(int)(dateX - dateToday).TotalSeconds, j};
             
         }

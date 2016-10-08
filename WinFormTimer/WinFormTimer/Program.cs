@@ -7,14 +7,14 @@ namespace WindowsFormsApplication1
 {
     static class Program
     {
-        public static Form1 myForm;
+        public static WinFormTimer myForm;
         /// <summary>
         /// Главная точка входа для приложения.
         /// </summary>
         [STAThread]
         static void Main()
         {
-            myForm = new Form1();
+            myForm = new WinFormTimer();
             Application.EnableVisualStyles();
             Application.Run(myForm);
         }
